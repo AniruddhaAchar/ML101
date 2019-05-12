@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+                        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+ <url>
+  <loc>https://aniruddhaachar.github.io/ML101/</loc>
+  <lastmod>2019-05-12T18:21:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://aniruddhaachar.github.io/ML101/2019/</loc>
+  <lastmod>2019-05-12T18:21:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://aniruddhaachar.github.io/ML101/archive.html</loc>
+  <lastmod>2019-05-12T18:21:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://aniruddhaachar.github.io/ML101/categories/</loc>
+  <lastmod>2019-05-12T18:21:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://aniruddhaachar.github.io/ML101/galleries/</loc>
+  <lastmod>2019-05-12T18:21:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://aniruddhaachar.github.io/ML101/listings/</loc>
+  <lastmod>2019-05-12T18:21:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://aniruddhaachar.github.io/ML101/pages/about/</loc>
+  <lastmod>2019-05-12T18:21:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://aniruddhaachar.github.io/ML101/posts/near-and-far/</loc>
+  <lastmod>2019-05-12T18:21:00Z</lastmod>
+ </url>
+</urlset>

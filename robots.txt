@@ -1,0 +1,4 @@
+Sitemap: https://aniruddhaachar.github.io/ML101/sitemapindex.xml
+
+User-Agent: *
+Host: aniruddhaachar.github.io
