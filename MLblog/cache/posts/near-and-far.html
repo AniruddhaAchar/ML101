@@ -1,0 +1,617 @@
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Measuring-similarity-between-points">Measuring similarity between points<a class="anchor-link" href="#Measuring-similarity-between-points">&#182;</a></h1><p>Measuring similarity between points in Machine Learning is a important specifically for pattern recog. and classification to see how close or far two data points are on the projected space.</p>
+<p>The metrics of similarities, measure different aspects of similarity and are used for differnet projection spaces. For instance, Euclidean Distance is used for Euclidean geometry like the name suggests and the cosine similarity is used more for a vectors (in word embedding and word vectors).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Eculidean-Distance">Eculidean Distance<a class="anchor-link" href="#Eculidean-Distance">&#182;</a></h1><p>This is the ordinary stright line distance between two points in Euclidean space. This is measure is also referred to as the  L^2 norml distance. Smaller the distance, the more alike the points are.</p>
+<p>There are a few variations of the formula to calculate the distance:</p>
+<h3 id="For-Cartesian-coordinate">For Cartesian coordinate<a class="anchor-link" href="#For-Cartesian-coordinate">&#182;</a></h3><p>The <strong>Eculidean Distance</strong> between two points $$ p =   p_1, p_2,..... p_n $$ $$q =   q_1, q_2,..... q_n $$</p>
+<p>$$ d(p, q) = d(q, p) =  \sqrt{(q_1 - p_1)^2 + (q_2 - p_2)^2+ ... + (q_n - p_n)^2} $$
+                                       $$= \sqrt{\sum_{i=1}^{n}(q_i - p_i)^2}$$</p>
+<h3 id="For-Euclidean-vector:">For Euclidean vector:<a class="anchor-link" href="#For-Euclidean-vector:">&#182;</a></h3><p>The Euclidean normal, or Euclidean length, or magnitude of two Euclidean vectors <strong>p</strong> and <strong>q</strong> starting from the origin of the space with their tips ending at the two points (p and q) is:</p>
+<p>$$ \lVert p - q \rVert = \sqrt{\lVert p \rVert^2 + \lVert q \rVert^2 - 2 p\cdot q }$$</p>
+<p>where
+$$ \lVert p \rVert = \sqrt{p_1^2 + p_2^2 + ... + p_n^2}$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+
+<span class="k">def</span> <span class="nf">euclidean_distance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculate Euclidean distacnce between two points p, q</span>
+<span class="sd">    </span>
+<span class="sd">            Calculates the Euclidean disatnce between two points p and  q.</span>
+<span class="sd">            </span>
+<span class="sd">            This function assumes that the poinst are in Cartesian coordinate.</span>
+<span class="sd">            </span>
+<span class="sd">            Args:</span>
+<span class="sd">                p (:obj: `list` of int or float): This is the first point.</span>
+<span class="sd">                q (:obj: `list` of int or float): This is the second point.</span>
+<span class="sd">            </span>
+<span class="sd">            Returns:</span>
+<span class="sd">                int: Distance between the two points.</span>
+<span class="sd">            </span>
+<span class="sd">            Raises:</span>
+<span class="sd">                AssertionError: If p and q are not of the name dimentionality.</span>
+<span class="sd">                AssertionError: If the list don&#39;t have elements of type int or float </span>
+<span class="sd">                </span>
+<span class="sd">            Example:</span>
+<span class="sd">                dist = euclidean_distance([1,2,3], [4,5,6])</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;p and q should of same length i.e. they should have the same dimentions&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">p_</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">p_</span> <span class="ow">in</span> <span class="n">p</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;All elements of the parameters passes should be of type int or float&quot;</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">q_</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">q_</span> <span class="ow">in</span> <span class="n">q</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;All elements of the parameters passes should be of type int or float&quot;</span><span class="p">)</span>
+    
+    <span class="c1">#int: Summation of all the squared differences between the two points.</span>
+    <span class="n">summation</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">):</span>
+        <span class="n">diff_sq</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">y</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="c1">#int: The square of the difference between each dimention.</span>
+        <span class="n">summation</span> <span class="o">+=</span> <span class="n">diff_sq</span>
+        
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">summation</span><span class="p">)</span> <span class="c1">#int: Square root of the summations of the square of the differences.</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">euclidean_distance</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">])</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[24]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>5.196152422706632</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Manhattan-distance">Manhattan distance<a class="anchor-link" href="#Manhattan-distance">&#182;</a></h1><p>The distance between two points is the sum of the absolute distance of their Cartesian coordinates. The measure is along right angles.</p>
+<p>Note: While Euclidean distances are stright line distance, Manhattan distance is always measured in right angles. Thus Manhattan distances are usually greater or equal to Euclidean distance.</p>
+<p>This metric has different names. Some of them are taxicab distance, or L1 normal.</p>
+<p>Mathamaticaly Manhattan distance is defined as d1, between two vectors <strong>p</strong>, <strong>q</strong> is the sum of the lengths of the projections of the line segments between the points onto the coordinate axes.</p>
+<p>$$d_1(\textbf{p}, \textbf{q}) = \| \textbf{p} - \textbf{q} \|_1 = \sum_{i=1}^n|p_i - q_i| $$</p>
+<p>where <strong>p</strong> = ($p_1, p_2, ..., p_n$) and <strong>q</strong> = ($q_1, q_2, ..., q_n$)</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">manhattan_distance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calcualtes the Manahattan Distance between the points p and q</span>
+<span class="sd">        This function assumes that the poinst are in Cartesian coordinate.</span>
+<span class="sd">            </span>
+<span class="sd">            Args:</span>
+<span class="sd">                p (:obj: `list` of int): This is the first point.</span>
+<span class="sd">                q (:obj: `list` of int): This is the second point.</span>
+<span class="sd">            </span>
+<span class="sd">            Returns:</span>
+<span class="sd">                int: Distance between the two points.</span>
+<span class="sd">            </span>
+<span class="sd">            Raises:</span>
+<span class="sd">                AssertionError: If p and q are not of the name dimentionality.</span>
+<span class="sd">                AssertionError: If the list don&#39;t have elements of type int or float </span>
+<span class="sd">                </span>
+<span class="sd">            Example:</span>
+<span class="sd">                dist = manhattan_distance([1,2,3], [4,5,6])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;p and q should of same length i.e. they should have the same dimentions&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">p_</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">p_</span> <span class="ow">in</span> <span class="n">p</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;All elements of the parameters passes should be of type int or float&quot;</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">q_</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">q_</span> <span class="ow">in</span> <span class="n">q</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;All elements of the parameters passes should be of type int or float&quot;</span><span class="p">)</span>
+        
+    <span class="c1">#int: Summation of all the squared differences between the two points.</span>
+    <span class="n">summation</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">):</span>
+        <span class="n">diff_abs</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">y</span><span class="p">)</span> <span class="c1">#int: The absolute of the difference between each dimention.</span>
+        <span class="n">summation</span> <span class="o">+=</span> <span class="n">diff_abs</span>
+        
+    <span class="k">return</span> <span class="n">summation</span> <span class="c1">#int: Summations of the absolute of the differences.</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">manhattan_distance</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">])</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[26]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>9</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Chebyshev-Distance">Chebyshev Distance<a class="anchor-link" href="#Chebyshev-Distance">&#182;</a></h1><p>Also known as Tchebychev distance, maximum metric is where distance between two vectors is greatest of thiir difference along any coordinate dimention.</p>
+<h3 id="Formal-defination:">Formal defination:<a class="anchor-link" href="#Formal-defination:">&#182;</a></h3><p>The Chebyshev Distance between two vectors or points p and q, with standard coordinates <em>$p_i$</em> and <em>$q_i$</em> respectively is</p>
+<p>$$D_Chebyshev(p,q) := max_{\substack{i}}(|p_i - q_i|)$$</p>
+<p>This equals the limit of the L_p metrics:</p>
+<p>$$\lim_k \to \infty (\sum_i=1^n |p_i - q_i|^k)^1/k$$</p>
+<p>Hence it is called $$L_\infty$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">chebyshev_distance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calcualtes the Chebyshev Distance between the points p and q</span>
+<span class="sd">        This function assumes that the poinst are in Cartesian coordinate.</span>
+<span class="sd">            </span>
+<span class="sd">            Args:</span>
+<span class="sd">                p (:obj: `list` of int): This is the first point.</span>
+<span class="sd">                q (:obj: `list` of int): This is the second point.</span>
+<span class="sd">            </span>
+<span class="sd">            Returns:</span>
+<span class="sd">                int: Distance between the two points.</span>
+<span class="sd">            </span>
+<span class="sd">            Raises:</span>
+<span class="sd">                AssertionError: If p and q are not of the name dimentionality.</span>
+<span class="sd">                AssertionError: If the list don&#39;t have elements of type int or float </span>
+<span class="sd">                </span>
+<span class="sd">            Example:</span>
+<span class="sd">                dist = chebyshev_distance([1,2,3], [4,5,6])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;p and q should of same length i.e. they should have the same dimentions&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">p_</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">p_</span> <span class="ow">in</span> <span class="n">p</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;All elements of the parameters passes should be of type int or float&quot;</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">q_</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">q_</span> <span class="ow">in</span> <span class="n">q</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;All elements of the parameters passes should be of type int or float&quot;</span><span class="p">)</span>
+        
+    <span class="c1">#list of `int or float`: List of absolute difference between the points.</span>
+    <span class="n">diffLst</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">):</span>
+        <span class="n">diffLst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">y</span><span class="p">))</span> <span class="c1">#int: The absolute of the difference between each dimention.</span>
+        
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">diffLst</span><span class="p">)</span> <span class="c1">#int: Maximun differnce.</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">chebyshev_distance</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">])</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[9]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>3</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Minkowski-Distance">Minkowski Distance<a class="anchor-link" href="#Minkowski-Distance">&#182;</a></h1><p>All the above distances are a spacial case of Minkowski distance. Mathmatically it can be represented as:</p>
+<p>For two points $$p = (p_1, p_2, ..., p_n)$$  $$q= (q_1, q_2, ..., q_n)$$</p>
+<p>$$D(p,q) = (\sum_i=1^n|p_i - q_i|^k)^{1/k}$$</p>
+<p>The values that is usually assigned to <em>k</em> is either 1 or 2 and the limiting factor p reaching infinity we observer Chebyshev distance.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">minkowski_distance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calcualtes the Minkowski Distance between the points p and q given the value of k.</span>
+<span class="sd">        This function assumes that the poinst are in Cartesian coordinate.</span>
+<span class="sd">            </span>
+<span class="sd">            Args:</span>
+<span class="sd">                p (:obj: `list` of int): This is the first point.</span>
+<span class="sd">                q (:obj: `list` of int): This is the second point.</span>
+<span class="sd">                k (int): This is the power to which the difference is raised.</span>
+<span class="sd">            </span>
+<span class="sd">            Returns:</span>
+<span class="sd">                int: Distance between the two points.</span>
+<span class="sd">            </span>
+<span class="sd">            Raises:</span>
+<span class="sd">                AssertionError: If p and q are not of the name dimentionality.</span>
+<span class="sd">                AssertionError: If the list don&#39;t have elements of type int or float </span>
+<span class="sd">                </span>
+<span class="sd">            Example:</span>
+<span class="sd">                dist = minkowski_distance([1,2,3], [4,5,6], 1)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;p and q should of same length i.e. they should have the same dimentions&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">p_</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">p_</span> <span class="ow">in</span> <span class="n">p</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;All elements of the parameters passes should be of type int or float&quot;</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">q_</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">q_</span> <span class="ow">in</span> <span class="n">q</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;All elements of the parameters passes should be of type int or float&quot;</span><span class="p">)</span>
+    
+    <span class="c1">#int: Summation of all the squared differences between the two points.</span>
+    <span class="n">summation</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">):</span>
+        <span class="n">diff_sq</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">((</span><span class="n">x</span><span class="o">-</span><span class="n">y</span><span class="p">))</span><span class="o">**</span><span class="n">k</span> <span class="c1">#int: The square of the difference between each dimention.</span>
+        <span class="n">summation</span> <span class="o">+=</span> <span class="n">diff_sq</span>
+        
+    <span class="k">return</span> <span class="p">(</span><span class="n">summation</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">k</span><span class="p">)</span> <span class="c1">#int: kth root of the summations of the kth power of the differences.</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">minkowski_distance</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[28]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>9.0</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">minkowski_distance</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[29]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>5.196152422706632</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Cosine-Similarity">Cosine Similarity<a class="anchor-link" href="#Cosine-Similarity">&#182;</a></h1><p>Cosine similarity is a measure of similarity between two non-zero vectors of an inner product space that measures the cosine of the angle between them. The cosine of 0° is 1, and it is less than 1 for any angle in the interval (0,π] radians. If the value of this distance is closer to 1, the vectors are similar. If the value is closer to -1, the vectors are dissimilar.</p>
+<h3 id="Defination:">Defination:<a class="anchor-link" href="#Defination:">&#182;</a></h3><p>The cosine of two non=zero vectors A and B can be determined using:</p>
+<p>$$A \cdot B = \|A\| \|B\| \cos\theta$$</p>
+<p>$$\cos(\theta) = \frac{A \cdot B}{\|A\| \|B\|} = \frac{\sum_{i=1}^n{A_iB_i}}{\sqrt{\sum_{i=1}^n{A_i^2}}\sqrt{\sum_{i=1}^n{B_i^2}}}$$</p>
+<p>where $A_i$ and $B_i$ are the components of vector A nad B respectively</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">sqrt</span>
+
+<span class="k">def</span> <span class="nf">cosine_similarity</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Measures the cosine similarity between two vectors A and B.</span>
+<span class="sd">    </span>
+<span class="sd">        Args:</span>
+<span class="sd">            A (:obj: `list` of int): This is the first vector.</span>
+<span class="sd">            B (:obj: `list` of int): This is the second vector.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">                int: Distance between the two points.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">                AssertionError: If A and B are not of the name dimentionality.</span>
+<span class="sd">                AssertionError: If the list don&#39;t have elements of type int or float </span>
+<span class="sd">                </span>
+<span class="sd">        Example:</span>
+<span class="sd">                similarity = cosine_similarity([1,2,3], [4,5,6])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">B</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;Parameters should of same length i.e. they should have the same dimentions&quot;</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">A_</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">A_</span> <span class="ow">in</span> <span class="n">A</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;All elements of the parameters passes should be of type int or float&quot;</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">B_</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">B_</span> <span class="ow">in</span> <span class="n">B</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;All elements of the parameters passes should be of type int or float&quot;</span><span class="p">)</span>
+    
+    <span class="n">AxB</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1">#Sum of product of vector A and B</span>
+    <span class="n">AxA</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1">#Sum of product of vector A and A</span>
+    <span class="n">BxB</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1">#Sum of product of vector B and B</span>
+    
+    <span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">):</span>
+        <span class="n">AxB</span> <span class="o">+=</span> <span class="n">a</span><span class="o">*</span><span class="n">b</span>
+        <span class="n">AxA</span> <span class="o">+=</span> <span class="n">a</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">BxB</span> <span class="o">+=</span> <span class="n">b</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">similarity</span> <span class="o">=</span> <span class="n">AxB</span><span class="o">/</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">AxA</span><span class="p">)</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">BxB</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">similarity</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cosine_similarity</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">120</span><span class="p">])</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[34]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0.8037417976696531</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Jaccard-Distance">Jaccard Distance<a class="anchor-link" href="#Jaccard-Distance">&#182;</a></h1><p>Jaccard Index is defined as the size of the intersection divided by the size of the union of two sample sets. If the two sets are empty, then the index is 1.</p>
+<p>Jaccard distance is 1- Jaccard index. Jaccard distance is the measure of dissimilarity between the two sets/ vectors.</p>
+<p>For vectors x,y where $x= (x_1, x_2, ... , x_n)$ and $y = (y_1, y_2, ..., y_n)$, the Jaccard index and distance is defined as:</p>
+<p>$$J(x,y) = \frac{\sum_i min(x_i, y_i)}{\sum_i max(x_i, y_i)}$$</p>
+<p>$$d_j(x, y) = 1 - J(x,y)$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">jaccard_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the Jaccard distance between two real value vectors x and y.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            x: (:obj: `list` of int or float) The first vector.</span>
+<span class="sd">            y: (:obj: `list` of int or float) The second vector.</span>
+<span class="sd">        Return:</span>
+<span class="sd">            int: Jaccard Distance between vector x and y</span>
+<span class="sd">        Raises:</span>
+<span class="sd">                AssertionError: If x and y are not of the name dimentionality.</span>
+<span class="sd">                AssertionError: If the list don&#39;t have elements of type int or float </span>
+<span class="sd">                </span>
+<span class="sd">        Example:</span>
+<span class="sd">                similarity = jaccard_distance([1,2,3], [4,5,6])</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;Parameters should of same length i.e. they should have the same dimentions&quot;</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x_</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;All elements of the parameters passes should be of type int or float&quot;</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">y_</span> <span class="ow">in</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;All elements of the parameters passes should be of type int or float&quot;</span><span class="p">)</span>
+    
+    <span class="n">sumMin</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">sumMax</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="k">for</span> <span class="n">x_</span><span class="p">,</span> <span class="n">y_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="n">sumMin</span><span class="o">+=</span> <span class="nb">min</span><span class="p">(</span><span class="n">x_</span><span class="p">,</span> <span class="n">y_</span><span class="p">)</span>
+        <span class="n">sumMax</span> <span class="o">+=</span> <span class="nb">max</span><span class="p">(</span><span class="n">x_</span><span class="p">,</span> <span class="n">y_</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">sumMin</span><span class="o">/</span><span class="n">sumMax</span><span class="p">)</span>
+    
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">jaccard_distance</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">])</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[12]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0.6</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+ 
+
