@@ -1,0 +1,145 @@
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="k-Nearest-Neighbor">k-Nearest Neighbor<a class="anchor-link" href="#k-Nearest-Neighbor">&#182;</a></h1><p>k Nearest Neighbour (kNN) is a non-parametric algorithm for classification or regression algorithm. This is usually the  first choices for a classification study when there is little or no prior knowledge about the distribution of the data. In kNN, the analysis is performed where parameteric estimates of probablity density are unknown or difficult to determine.</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/KnnClassification.svg" alt="kNN visualization" title="kNN visualization"></p>
+<p>The kNN algorithm is fed some training data. This traning data has <em>h</em> <em>n</em> dimentional data points with the associated lables. When a new <em>n</em> dimentional data point i.e. <em>test</em> data point is provided, the distance between the test point and each of the <em>h</em> training points is calculated. This distance is usually Euclidean distance. Then the distances are sorted from the smallest to the largest. Then the majority of the <em>k</em> smallest point's lable is assigned to the test point.</p>
+<p>This can be represented as:</p>
+<p>Classification typically involves partitioning samples into training and testing categories. Let $x_i$ be a training sample and x be a test sample, and let $\omega$ be the true class of a training sample and $ \hat{\omega}$ be the predicted class for a test sample ($\omega$, $\hat{\omega}$=1,2,…,$\Omega$) . Here, $\Omega$ is the total number of classes.</p>
+<p>During the training process, we use only the true class $\Omega$ of each training sample to train the classifier, while during testing we predict the class $ \hat{\omega}$ of each test sample. It warrants noting that kNN is a "supervised" classification method in that it uses the class labels of the training data.</p>
+<p>With 1-nearest neighbor rule, the predicted class of test sample x is set equal to the true class $\omega$ of its nearest neighbor, where $m_i$ is a nearest neighbor to x if the distance</p>
+<p>d($m_i$,x)=$min_j${d($m_j$,x)}.</p>
+<p>For k-nearest neighbors, the predicted class of test sample x is set equal to the most frequent true class among k nearest training samples.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="k">import</span> <span class="n">distance</span> 
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
+
+
+<span class="k">class</span> <span class="nc">kNN</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;k-Nearest Neighbor implements the bruteforce kNN classification algorithm.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        x_train (:obj:ndarray numpy array): The training feature array.</span>
+<span class="sd">        y_train (:obj:ndarray numpy array): The training lable array.</span>
+<span class="sd">        x_test (:obj:ndarray numpy array): The test feature array.</span>
+<span class="sd">        y_test (:obj:ndarray numpy array): The test lable array.</span>
+<span class="sd">        k (int): The k nearest neighbors that need to be looked at.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The type of k should be an &#39;int&#39; but found </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">k</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_test</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_test_feature_length</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
+    
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">):</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The type of x_train should be an &#39;numpy.ndarray&#39; but found </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x_train</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The type of y_train should be an &#39;numpy.ndarray&#39; but found </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">y_train</span><span class="p">)))</span>
+        
+        <span class="c1">#Check if all the x_train points have the same features.</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The traning points are not of the same size. The number of feature are different.&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">x_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">y_train</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The number of training examples and the lables are not of the name size.&quot;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_test_feature_length</span> <span class="o">=</span> <span class="n">x_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_train</span> <span class="o">=</span> <span class="n">x_train</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_train</span> <span class="o">=</span> <span class="n">y_train</span>
+        
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_test</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The type of x_test should be an &#39;numpy.ndarray&#39; but found </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x_test</span><span class="p">)))</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_test</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The testing points are not of the same size. The number of feature are different.&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">x_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_test_feature_length</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The test and training feature sets are not the same.  Training feature length </span><span class="si">{}</span><span class="s2">, Test feature length </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_test_feature_length</span><span class="p">,</span> <span class="n">x_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span>  <span class="n">x_test</span><span class="p">:</span>
+            <span class="n">_distLst</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_train</span><span class="p">):</span>
+                <span class="n">_distLst</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">i</span> <span class="p">,</span><span class="s2">&quot;dist&quot;</span> <span class="p">:</span> <span class="n">distance</span><span class="o">.</span><span class="n">euclidean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x_</span><span class="p">)})</span>
+            <span class="n">_distLst</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">_distLst</span><span class="p">,</span> <span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;dist&#39;</span><span class="p">])</span>
+            <span class="n">_distLst</span> <span class="o">=</span> <span class="n">_distLst</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">]</span> <span class="c1">#Select only first k lables with the shortest distance</span>
+            
+            <span class="n">kNN</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">_distLst</span><span class="p">:</span>
+                <span class="n">kNN</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_train</span><span class="p">[</span><span class="n">ele</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]])</span>
+            
+            
+        
+        <span class="k">return</span> <span class="n">Counter</span><span class="p">(</span><span class="n">kNN</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            
+        
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">]])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="n">k</span> <span class="o">=</span> <span class="n">kNN</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">k</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="n">k</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.1</span><span class="p">]]))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[36]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+ 
+
