@@ -1,0 +1,483 @@
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="True-Positive,-True-Negative,-False-Negative-and-False-Positive">True Positive, True Negative, False Negative and False Positive<a class="anchor-link" href="#True-Positive,-True-Negative,-False-Negative-and-False-Positive">&#182;</a></h1><p>In classification, the prediction of a model can be generally catogarized into True Positive, True Negative, False Negative and False Positive where</p>
+<ol>
+<li>True Positive is an outcome where the model correctly predicts the positive class.</li>
+<li>True Negative is an outcome where the model correctly predicts the negative class.</li>
+<li>Flase Positive is an outcome where the model incorrectly predicts the positive class.</li>
+<li>Flase Negative is an outcome where the model incorrectly predicts the negative class.</li>
+</ol>
+<p>This can be represented in a matrix as:</p>
+<table>
+<thead><tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TP</td>
+<td>FP</td>
+</tr>
+<tr>
+<td>FN</td>
+<td>TN</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">get_positives_and_negatives</span><span class="p">(</span><span class="n">yTrue</span><span class="p">,</span> <span class="n">yPredicted</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculates the True Positive, True Negative, False Negative and False Positive of the given true and predicted numpy arrays.</span>
+<span class="sd">        Here the arrays are assumed to have only 2 classes.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        yTrue (numpy ndarray): The true lables. Ground truth.</span>
+<span class="sd">        yPredict (numpy ndarray): The predicted lables. Predictions.</span>
+<span class="sd">    </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        Assertion Exception: If yTrue or yPredict is not a numpy array</span>
+<span class="sd">    </span>
+<span class="sd">    Returns (:obj: numpy ndarray): A numpy array containing True Positive, True Negative, False Negative and False Positive</span>
+<span class="sd">    </span>
+<span class="sd">    Example:</span>
+<span class="sd">        get_positives_and_negatives(np.asarray([0,0,1,0,0,1,0]), np.asarray([0,1,1,0,1,0,0]))</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">yTrue</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> must be of type numpy.ndarray&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">yTrue</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">yPredicted</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> must be of type numpy.ndarray&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">yPredicted</span><span class="p">))</span>
+    
+    <span class="n">TP</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">yPredicted</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">yTrue</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))</span>
+    
+    <span class="n">TN</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">yPredicted</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="n">yTrue</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span>
+    
+    <span class="n">FP</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">yPredicted</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">yTrue</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span>
+    
+    <span class="n">FN</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">yPredicted</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="n">yTrue</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">TP</span><span class="p">,</span> <span class="n">TN</span><span class="p">,</span> <span class="n">FP</span><span class="p">,</span> <span class="n">FN</span><span class="p">])</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">get_positives_and_negatives</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[4]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([1, 3, 2, 1])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Confusion-matrix">Confusion matrix<a class="anchor-link" href="#Confusion-matrix">&#182;</a></h1><p>Confusion matrix is used to visualize the performance of a classification model. In this matrix, the rows are the predicted values and the columns are the true values. The name stems from the fact that it makes it easy to see if the model is confusing two classes.</p>
+<table>
+<thead><tr>
+<th></th>
+<th>Cat</th>
+<th>Dog</th>
+<th>Rabbit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cat</td>
+<td>5</td>
+<td>2</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Dog</td>
+<td>3</td>
+<td>3</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Rabbit</td>
+<td>1</td>
+<td>1</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[48]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">coo_matrix</span>
+
+<span class="k">def</span> <span class="nf">confusion_matrix</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y_true</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Builds a confusion matrix for the given predicted and trye numpy array.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        y_pred (numpy ndarray): The true lables. Ground truth.</span>
+<span class="sd">        y_true (numpy ndarray): The predicted lables. Predictions.</span>
+<span class="sd">    </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        Assertion Exception: If yTrue or yPredict is not a numpy array</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        C (numpy ndarray): The confusion matrix that was calculated.</span>
+<span class="sd">    </span>
+<span class="sd">    Example:</span>
+<span class="sd">        y_true = [2, 0, 2, 2, 0, 1]</span>
+<span class="sd">        y_pred = [0, 0, 2, 2, 0, 2]</span>
+<span class="sd">        confusion_matrix(y_pred, y_True)</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> must be of type numpy.ndarray&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y_true</span><span class="p">))</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> must be of type numpy.ndarray&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y_pred</span><span class="p">))</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">y_pred</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">y_true</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;The predicted array and the ground truth arrays must be of the same size&quot;</span><span class="p">)</span>
+    
+    <span class="n">_labelsT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span> <span class="c1">#Get the lables in the ground truth.</span>
+    
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">_labelsT</span> <span class="c1">#Create a array of lables.</span>
+    
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">y_true</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1"># Create an array of ones so that we can pass this as the basic building block to confusion matrix. </span>
+    
+    <span class="n">num_labels</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">size</span>
+    
+    <span class="c1">#Builds a dict that converts lables to indices. This will help us populate the confusion matrix.</span>
+    
+    <span class="n">labels_to_index</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">label</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span> <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span> 
+    
+    <span class="c1">#Build y_pred_idx and y_true_idx numpy arrays that has the index equivalent of the lables</span>
+    
+    <span class="n">y_pred_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">labels_to_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">y_pred</span><span class="p">])</span>
+    
+    <span class="n">y_true_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">labels_to_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">y_true</span><span class="p">])</span>
+    
+    <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">y_pred_idx</span> <span class="o">&lt;</span> <span class="n">num_labels</span><span class="p">,</span> <span class="n">y_true_idx</span> <span class="o">&lt;</span> <span class="n">num_labels</span><span class="p">)</span>
+    
+    <span class="n">y_pred_idx</span> <span class="o">=</span> <span class="n">y_pred_idx</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
+    <span class="n">y_true_idx</span> <span class="o">=</span> <span class="n">y_true_idx</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
+    
+    <span class="n">CM</span> <span class="o">=</span> <span class="n">coo_matrix</span><span class="p">((</span><span class="n">weights</span><span class="p">,</span> <span class="p">(</span><span class="n">y_true_idx</span><span class="p">,</span> <span class="n">y_pred_idx</span><span class="p">)),</span> <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_labels</span><span class="p">,</span> <span class="n">num_labels</span><span class="p">))</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">CM</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[49]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y_true</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y_true</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[49]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([[2., 0., 0.],
+       [0., 0., 1.],
+       [1., 0., 2.]])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y_true</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[38]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([2, 0, 0, 0, 0, 1, 1, 0, 2], dtype=int8)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[36]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([[0, 2],
+       [1, 1]], dtype=int8)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tn</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">tp</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+<span class="p">(</span><span class="n">tn</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">tp</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[37]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(0, 2, 1, 1)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Accuracy">Accuracy<a class="anchor-link" href="#Accuracy">&#182;</a></h1><p>This is the fraction of the predictioins that were predicted right. It is given by:</p>
+<p>$$\frac{True Positive + True Negative}{True Positive + True Negative + False Negative + False positive}$$</p>
+<p>When working with class imbalence data i.e. where the number of examples of each class is different, accuracy doesn't always give the full story. Here the model has been trained on one class more than on another and the test data also has an imbalence thus resulting in higer accuracy.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Precision-and-Recall">Precision and Recall<a class="anchor-link" href="#Precision-and-Recall">&#182;</a></h1><p>Precision is the fraction of the predicted values that were true positive i.e. are actually correct.</p>
+<p>It is defined as 
+$$\frac{True Positive}{True Positive + False Positive}$$</p>
+<p>Recall is the fraction of the predicteds that were identified correctly.</p>
+<p>It is defined as:</p>
+<p>$$\frac{True Positive}{True Positive + False Negative}$$</p>
+<p><strong>In simple terms, high precision means that an algorithm returned substantially more relevant results than irrelevant ones, while high recall means that an algorithm returned most of the relevant results.</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="F1-Score">F1 Score<a class="anchor-link" href="#F1-Score">&#182;</a></h1><p>F1 score is a measure of a test's accuracy. It is the harmonic mean of Precision and Recall.</p>
+<p>It is defined as:</p>
+<p>$$2 \times \frac{Precision \times Recall}{Precision + Recall}$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[64]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_precision_recall_f1score</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y_true</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculates precision, recall and f1score the given predicted and trye numpy array.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">         yTrue (numpy ndarray): The true lables. Ground truth.</span>
+<span class="sd">        yPredict (numpy ndarray): The predicted lables. Predictions.</span>
+<span class="sd">    </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        Assertion Exception: If yTrue or yPredict is not a numpy array</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        cr (dictionary of precision, recall and f1score for each of the label): The precision, recall and f1score for each of the label.</span>
+<span class="sd">    </span>
+<span class="sd">    Example:</span>
+<span class="sd">        y_true = [0, 1, 2, 2, 2]</span>
+<span class="sd">        y_pred = [[0, 0, 2, 2, 1]</span>
+<span class="sd">        get_precision_recall_f1score(y_pred, y_True)</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">CM</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y_true</span><span class="p">)</span>
+    
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span>
+    
+    <span class="n">cr</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    
+    <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="n">CM</span><span class="p">[</span><span class="n">label</span><span class="p">,</span> <span class="n">label</span><span class="p">]</span>
+        <span class="n">fp</span> <span class="o">=</span> <span class="n">CM</span><span class="p">[:,</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">-</span> <span class="n">tp</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="n">CM</span><span class="p">[</span><span class="n">label</span><span class="p">,:]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">-</span><span class="n">tp</span>
+        <span class="n">prec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">tp</span><span class="o">/</span><span class="p">(</span><span class="n">tp</span><span class="o">+</span><span class="n">fp</span><span class="p">),</span> <span class="n">decimals</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">recall</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">tp</span><span class="o">/</span><span class="p">(</span><span class="n">tp</span><span class="o">+</span><span class="n">fn</span><span class="p">),</span> <span class="n">decimals</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prec</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">recall</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">:</span>
+            <span class="n">f1</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">f1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span> <span class="p">(</span><span class="n">prec</span> <span class="o">*</span> <span class="n">recall</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">prec</span> <span class="o">+</span> <span class="n">recall</span><span class="p">),</span> <span class="n">decimals</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">cr</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">prec</span><span class="p">,</span> <span class="n">recall</span><span class="p">,</span> <span class="n">f1</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">cr</span>
+    
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[65]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y_true</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">get_precision_recall_f1score</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y_true</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[65]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{0: (0.5, 1.0, 0.67), 1: (0.0, 0.0, 0.0), 2: (1.0, 0.67, 0.8)}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+ 
+
