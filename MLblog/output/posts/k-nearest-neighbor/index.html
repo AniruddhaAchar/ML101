@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Walk like a duck, quack like a duck I am most probably a duck | ML101</title>
+<title>k-Nearest Neighbor | ML101</title>
 <link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
 <link href="../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
 <link href="../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
@@ -11,15 +11,15 @@
 <meta name="theme-color" content="#5670d4">
 <meta name="generator" content="Nikola (getnikola.com)">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.xml">
-<link rel="canonical" href="https://aniruddhaachar.github.io/ML101/posts/walk-like-a-duck-quack-like-a-duck-i-am-most-probably-a-duck/">
+<link rel="canonical" href="https://aniruddhaachar.github.io/ML101/posts/k-nearest-neighbor/">
 <!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="Aniruddha Achar">
-<link rel="prev" href="../evaluate-a-classification-model/" title="Evaluate a Classification Model" type="text/html">
+<link rel="prev" href="../simple-linear-regression/" title="Simple Linear regression" type="text/html">
 <meta property="og:site_name" content="ML101">
-<meta property="og:title" content="Walk like a duck, quack like a duck I am most probably a duck">
-<meta property="og:url" content="https://aniruddhaachar.github.io/ML101/posts/walk-like-a-duck-quack-like-a-duck-i-am-most-probably-a-duck/">
+<meta property="og:title" content="k-Nearest Neighbor">
+<meta property="og:url" content="https://aniruddhaachar.github.io/ML101/posts/k-nearest-neighbor/">
 <meta property="og:description" content="k-Nearest Neighbor¶k Nearest Neighbour (kNN) is a non-parametric algorithm for classification or regression algorithm. This is usually the  first choices for a classification study when there is littl">
 <meta property="og:type" content="article">
-<meta property="article:published_time" content="2019-05-13T00:47:44+05:30">
+<meta property="article:published_time" content="2019-05-19T19:57:26+05:30">
 </head>
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -76,7 +76,7 @@
         <!--Body content-->
         
         
-<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Walk like a duck, quack like a duck I am most probably a duck</a></h1>
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">k-Nearest Neighbor</a></h1>
 
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
@@ -84,7 +84,7 @@
             </span></p>
             <p class="dateline">
             <a href="." rel="bookmark">
-            <time class="published dt-published" datetime="2019-05-13T00:47:44+05:30" itemprop="datePublished" title="2019-05-13 00:47">2019-05-13 00:47</time></a>
+            <time class="published dt-published" datetime="2019-05-19T19:57:26+05:30" itemprop="datePublished" title="2019-05-19 19:57">2019-05-19 19:57</time></a>
             </p>
             
         <p class="sourceline"><a href="index.ipynb" class="sourcelink">Source</a></p>
@@ -105,10 +105,10 @@
 <p><img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/KnnClassification.svg" alt="kNN visualization" title="kNN visualization"></p>
 <p>The kNN algorithm is fed some training data. This traning data has <em>h</em> <em>n</em> dimentional data points with the associated lables. When a new <em>n</em> dimentional data point i.e. <em>test</em> data point is provided, the distance between the test point and each of the <em>h</em> training points is calculated. This distance is usually Euclidean distance. Then the distances are sorted from the smallest to the largest. Then the majority of the <em>k</em> smallest point's lable is assigned to the test point.</p>
 <p>This can be represented as:</p>
-<p>Classification typically involves partitioning samples into training and testing categories. Let $x_i$ be a training sample and x be a test sample, and let $\omega$ be the true class of a training sample and $ \hat{\omega}$ be the predicted class for a test sample ($\omega$, $\hat{\omega}$=1,2,…,$\Omega$) . Here, $\Omega$ is the total number of classes.</p>
-<p>During the training process, we use only the true class $\Omega$ of each training sample to train the classifier, while during testing we predict the class $ \hat{\omega}$ of each test sample. It warrants noting that kNN is a "supervised" classification method in that it uses the class labels of the training data.</p>
-<p>With 1-nearest neighbor rule, the predicted class of test sample x is set equal to the true class $\omega$ of its nearest neighbor, where $m_i$ is a nearest neighbor to x if the distance</p>
-<p>d($m_i$,x)=$min_j${d($m_j$,x)}.</p>
+<p>Classification typically involves partitioning samples into training and testing categories. Let $$x_i$$ be a training sample and x be a test sample, and let $$\omega$$ be the true class of a training sample and $$ \hat{\omega}$$ be the predicted class for a test sample $$(\omega, \hat{\omega}=1,2,…,\Omega)$$ . Here, $$\Omega$$ is the total number of classes.</p>
+<p>During the training process, we use only the true class $$\Omega$$ of each training sample to train the classifier, while during testing we predict the class $$ \hat{\omega}$$ of each test sample. It warrants noting that kNN is a "supervised" classification method in that it uses the class labels of the training data.</p>
+<p>With 1-nearest neighbor rule, the predicted class of test sample x is set equal to the true class $$\omega$$ of its nearest neighbor, where $$m_i$$ is a nearest neighbor to x if the distance</p>
+<p>$$d(m_i,x)=min_j{d(m_j,x)}$$.</p>
 <p>For k-nearest neighbors, the predicted class of test sample x is set equal to the most frequent true class among k nearest training samples.</p>
 
 </div>
@@ -116,12 +116,12 @@
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In [35]:</div>
+<div class="prompt input_prompt">In [3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="k">import</span> <span class="n">distance</span> 
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
+<div class=" highlight hl-python"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="kn">import</span> <span class="n">distance</span> 
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
 
 
 <span class="k">class</span> <span class="nc">kNN</span><span class="p">:</span>
@@ -137,9 +137,9 @@
     
     
     
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The type of k should be an 'int' but found </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">k</span><span class="p">)))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The type of k should be an 'int' but found {}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">k</span><span class="p">)))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
@@ -150,9 +150,9 @@
     <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">):</span>
         
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The type of x_train should be an 'numpy.ndarray' but found </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x_train</span><span class="p">)))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The type of x_train should be an 'numpy.ndarray' but found {}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x_train</span><span class="p">)))</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The type of y_train should be an 'numpy.ndarray' but found </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">y_train</span><span class="p">)))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The type of y_train should be an 'numpy.ndarray' but found {}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">y_train</span><span class="p">)))</span>
         
         <span class="c1">#Check if all the x_train points have the same features.</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -167,13 +167,13 @@
         
     <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_test</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The type of x_test should be an 'numpy.ndarray' but found </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x_test</span><span class="p">)))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The type of x_test should be an 'numpy.ndarray' but found {}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x_test</span><span class="p">)))</span>
         
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_test</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The testing points are not of the same size. The number of feature are different."</span><span class="p">)</span>
         
         <span class="k">if</span> <span class="ow">not</span> <span class="n">x_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_test_feature_length</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The test and training feature sets are not the same.  Training feature length </span><span class="si">{}</span><span class="s2">, Test feature length </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_test_feature_length</span><span class="p">,</span> <span class="n">x_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The test and training feature sets are not the same.  Training feature length {}, Test feature length {}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_test_feature_length</span><span class="p">,</span> <span class="n">x_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
         
         <span class="n">y_pred</span> <span class="o">=</span> <span class="p">[]</span>
         
@@ -191,8 +191,6 @@
             
         
         <span class="k">return</span> <span class="n">Counter</span><span class="p">(</span><span class="n">kNN</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-            
-        
 </pre></div>
 
 </div>
@@ -202,10 +200,10 @@
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In [36]:</div>
+<div class="prompt input_prompt">In [4]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">]])</span>
+<div class=" highlight hl-python"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">]])</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 
 <span class="n">k</span> <span class="o">=</span> <span class="n">kNN</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
@@ -224,7 +222,7 @@
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[36]:</div>
+<div class="prompt output_prompt">Out[4]:</div>
 
 
 
@@ -243,7 +241,7 @@
     </div>
     <aside class="postpromonav"><nav><ul class="pager hidden-print">
 <li class="previous">
-                <a href="../evaluate-a-classification-model/" rel="prev" title="Evaluate a Classification Model">Previous post</a>
+                <a href="../simple-linear-regression/" rel="prev" title="Simple Linear regression">Previous post</a>
             </li>
         </ul></nav></aside><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" integrity="sha256-SDRP1VVYu+tgAGKhddBSl5+ezofHKZeI+OzxakbIe/Y=" crossorigin="anonymous"></script><script type="text/x-mathjax-config">
         MathJax.Hub.Config({tex2jax: {inlineMath: [['$latex ','$'], ['\\(','\\)']]}});

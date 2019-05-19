@@ -1,0 +1,194 @@
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Simple-Linear-regression">Simple Linear regression<a class="anchor-link" href="#Simple-Linear-regression">&#182;</a></h1><p>This is amongst the simplest and popular regression algorithm. This like almost all machine learning algorithm has a strong start in statics.
+ This algorithm, is used to map the relationship between two variables namely <strong>X</strong> and <strong>Y</strong>.
+ Given known values of X and Y; assuming that the relation between the variables is linear in nature, can we fit a line that predicts values of Y based on given values of X?
+ Well... this is what is achieved by linear regression. With this definition, we know the limitation. This can only fit observations with linear relationships.</p>
+<p>Talking about lines, one of the most familiar equations in math springs to mind.
+$$ y = mx +c$$</p>
+<p>The above equation represents shows that we can predict the value of the unknown/dependent values of <strong>Y</strong> if we know the right combination of <strong>m</strong> and <strong>c</strong>.
+Here <strong>m</strong> is called the scale factor or bias and <strong>c</strong> is called the bias coefficient.
+So how do we compute the right values of <strong>m</strong> and <strong>c</strong>? There are two approaches to get these values.</p>
+<ul>
+<li>Gradient decent</li>
+<li>Least Mean Squared Method.</li>
+</ul>
+<p>For this post, we will be using the Least Mean Squared Method. Our aim here is to reduce the difference between the actual value of <em>y</em> and the predicted value. Lets called the predicted value <em>h(x)</em>
+For an instance of <em>i</em> of <em>y</em>
+$$y_i = mx_i + c + \epsilon_i$$
+Here $$\epsilon_i$$ is the error in computation of <strong>y_i</strong>. Our learning algorithm's main task is to learn the values of <em>m</em> and <em>c</em> so that $\epsilon$ is minimum. This minimization is inferred using the cost function which is given by
+$$J(m, c) = \frac{1}{2n}\sum_{i=1}^{n}\epsilon_i^2$$
+Our task here is to minimize the cost function defined above. We can do that through gradient decent as mentioned above, we have can also use a less computational method (is not that accurate) which is the least mean squared method.
+Not going into a lot of math, we derive the values of <em>m</em> and <em>c</em> as
+$$c = \frac{SS_{xy}}{SS_{xx}}$$
+$$m = \overline{y} - c\overline{x}$$
+Here $$ \overline{y} and \overline{x} $$ are mean/arithemetic averages of <em>y</em> and <em>x</em> respectively.
+$${SS_{xy}} = \sum_{i=1}^{n}(x_i - \overline{x})(y_i - \overline{y}) = \sum_{i=1}^{n}x_iy_i - n\overline{x}\overline{y}$$
+$${SS_{xx}} = \sum_{i=1}^{n}(x_i - \overline{x})^2 = \sum_{i=1}^{n}x_i^2 - n(\overline{x})^2$$</p>
+<p>Done with all the math talk. Lets implement this in python.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-python"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="k">class</span> <span class="nc">linearRegression</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Linear Regression computes linear regression line using Least Squared Method. </span>
+<span class="sd">        This implementation is for a univalue training and test data.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        x_train (:obj:1darray numpy array): The training feature array.</span>
+<span class="sd">        y_train (:obj:1darray numpy array): The training label array.</span>
+<span class="sd">        x_test (:obj:1darray numpy array): The test feature array.</span>
+<span class="sd">        y_test (:obj:1darray numpy array): The test label array.</span>
+<span class="sd">        m (float): Initial value of first coefficient. Optional.</span>
+<span class="sd">        c (float): Initial value of first coefficient. Optional.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The type of m should be an &#39;float&#39; but found {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">m</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The type of c should be an &#39;float&#39; but found {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">c</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_test</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">m</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">c</span>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;Fits the simple linear regression model. Does some validation on the data passed to it.</span>
+<span class="sd">        Args:</span>
+<span class="sd">        x_train (numpy ndarray): The independent variables.</span>
+<span class="sd">        y_train (numpy ndarray): The dependent variable.</span>
+<span class="sd">        </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If x_train is not of type numpy.</span>
+<span class="sd">            ValueError: If y_train is not of type numpy.</span>
+<span class="sd">            ValueError: If x_train is not a one dimensional array.</span>
+<span class="sd">            ValueError: If y_train is not a one dimensional array.</span>
+<span class="sd">            ValueError: If the length of x_train and y_train are not same.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+            
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The type of x_train should be an &#39;numpy.ndarray&#39; but found {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x_train</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The type of y_train should be an &#39;numpy.ndarray&#39; but found {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">y_train</span><span class="p">)))</span>
+        
+        <span class="k">if</span><span class="p">(</span><span class="n">x_train</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;This implementation only calculates univalue linear regression line. We found dimension as {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x_train</span><span class="o">.</span><span class="n">ndim</span><span class="p">))</span>
+        
+        <span class="k">if</span><span class="p">(</span><span class="n">y_train</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The dependent/target training value must be a one dimensional array. We found dimension as {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y_train</span><span class="o">.</span><span class="n">ndim</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">x_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">y_train</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The number of training examples and the lables are not of the name size.&quot;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_train</span> <span class="o">=</span> <span class="n">x_train</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_train</span> <span class="o">=</span> <span class="n">y_train</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_coef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">compute_coef</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;Computes the regression coefficients for the given values of x and y.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (numpy ndarray): The independent variables.</span>
+<span class="sd">            y (numpy ndarray): The dependent variable.</span>
+
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (m, c) (:tuple:float): The computed regression coefficients.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># number of observations/points </span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> 
+
+        <span class="c1"># mean of x and y</span>
+        <span class="n">m_x</span><span class="p">,</span> <span class="n">m_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="c1">#compute the cross-deviation and deviation of x</span>
+        <span class="n">SS_xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">n</span><span class="o">*</span><span class="n">m_y</span><span class="o">*</span><span class="n">m_x</span> 
+        <span class="n">SS_xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">n</span><span class="o">*</span><span class="n">m_x</span><span class="o">*</span><span class="n">m_x</span> 
+
+        <span class="c1">#Compute the regression coefficients</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">SS_xy</span> <span class="o">/</span> <span class="n">SS_xx</span> 
+        <span class="n">m</span> <span class="o">=</span> <span class="n">m_y</span> <span class="o">-</span> <span class="n">c</span><span class="o">*</span><span class="n">m_x</span> 
+        
+        <span class="k">return</span> <span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_test</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Predicts the y_test values using the calculated coefficients.</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            x_test {numpy ndarray} -- The x values on which the predictions needs to be made.</span>
+<span class="sd">        </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If x_train is not of type numpy ndarray</span>
+<span class="sd">        </span>
+<span class="sd">        Return:</span>
+<span class="sd">            y_pred {list: float} -- The predicted values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The type of x_test should be an &#39;numpy.ndarray&#39; but found {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x_test</span><span class="p">)))</span>
+        
+        
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">_x</span> <span class="ow">in</span> <span class="n">x_test</span><span class="p">:</span>
+            <span class="n">y_pred</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">*</span><span class="n">_x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">y_pred</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-python"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span> 
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">])</span> 
+<span class="n">model</span> <span class="o">=</span> <span class="n">linearRegression</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[1.1696969696969697, 2.4060606060606062, 3.6424242424242426, 4.878787878787879, 6.115151515151515, 7.351515151515152, 8.587878787878788, 9.824242424242424, 11.06060606060606, 12.296969696969697]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+ 
+
